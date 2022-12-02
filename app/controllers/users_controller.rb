@@ -8,6 +8,9 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @books = @user.books
     @book = Book.new
+    @book_count_current_week = @books.where(created_at: from..to).count
+    @book_count_last_week = 
+    
   end
 
   def index
