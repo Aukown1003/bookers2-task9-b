@@ -25,7 +25,7 @@
   </tbody>
 </table>
 <div>
-  <h2>投稿数の前日比・前週比</h2>
+  <h3>投稿数の前日比・前週比</h3>
 </div>
 <table class='table'>
   <thead>
@@ -39,10 +39,10 @@
     <tr>
       <td><%= book_count_today %></td>
       <td><%= book_count_yesterday %></td>
-      <% if book_count_today .zero? || book_count_yesterday.zero? %>
+      <% if book_count_yesterday.zero? || book_count_today.zero? %>
         <% percentage = 0 %>
       <% else %>
-        <% percentage = (book_count_today  / book_count_yesterday)*100 %>
+        <% percentage = (book_count_today / book_count_yesterday)*100 %>
       <% end %>
       <td><%= number_to_percentage(percentage, precision: 0)%></td>
     </tr>
@@ -60,7 +60,7 @@
     <tr>
       <td><%= book_count_current_week %></td>
       <td><%= book_count_last_week %></td>
-      <% if book_count_current_week.zero? || book_count_last_week.zero? %>
+      <% if book_count_last_week.zero? || book_count_current_week.zero? %>
         <% percentage = 0 %>
       <% else %>
         <% percentage = (book_count_current_week / book_count_last_week)*100 %>
