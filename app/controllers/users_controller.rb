@@ -5,12 +5,19 @@ class UsersController < ApplicationController
   before_action :ensure_correct_user, only: [:update]
 
   def show
+    week_ago_to = 1.week.ago.end_of_day
+    week_ago_from = (week_ago_to - 6.day).at_beginning_of_day
+    to = Time.current.at_end_of_day
+    from = (to - 6.day).at_beginning_of_day
+    yesterday = (to - 1.day)
+    
     @user = User.find(params[:id])
     @books = @user.books
     @book = Book.new
+    @book_count_today = @books.where(created_at: Time.current.at_beginning_of_day..to).count 
+    @book_count_yesterday = @books.where(created_at: yesterday.at_beginning_of_day..yesterday.at_end_of_day).count
     @book_count_current_week = @books.where(created_at: from..to).count
-    @book_count_last_week = 
-    
+    @book_count_last_week = @books.where(created_at: week_ago_from..week_ago_to).count
   end
 
   def index
@@ -50,7 +57,7 @@ class UsersController < ApplicationController
       redirect_to user_path(current_user)
     end
   end
-  
+
   def currect_user
       @user = User.find(params[:id])
       redirect_to(root_url) unless current_user?(@user)
