@@ -57,7 +57,7 @@
   <% count << books.created_day(n).count %>
 <% end %>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 <!--<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>-->
 <div class="mb-3">
   <canvas id="myChart"></canvas>
@@ -81,13 +81,14 @@
            <%= books.created_day(0).count %>],
           borderColor: "rgba(0,0,255,1)",
           lineTension: 0.5 //線の丸みを指定。0で直線
-         }]
+         }],
       },//dataはここまで
       options: {
         title: {
           display: true,
           text: '7日間の投稿数の比較'
         },
+        responsive: true,
         scales: {
           y: {
             suggestedMin: 0,
@@ -98,11 +99,25 @@
           }
         }
       }
-    })
+    });
   });
 </script>
 
-
+<script>
+  var chart
+  $(document).on ('turbolinks:load', function(){
+    const ctx = document.getElementById("myChart");
+    if ( chart ){ chart.destroy(); }
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ["6日前", "5日前", "4日前", "3日前", "2日前", "1日前", "今日"],
+        datasets: [{label: "投稿した本の数",data: <%= count %>,borderColor: "rgba(0,0,255,1)",lineTension: 0.5}]
+      },
+      options: {scales: {y: {suggestedMin: 0,suggestedMax: 10,ticks: {stepSize: 1}}}},
+    })
+  });
+</script>
 
 <div>
   <h3>投稿数の前日比・前週比</h3>
