@@ -57,36 +57,53 @@
   <% count << books.created_day(n).count %>
 <% end %>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>-->
 <div class="mb-3">
   <canvas id="myChart"></canvas>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
+
 <script>
-  $(document).on('turbolinks:load',function() {
+  $(document).on('turbolinks:load',function(){
     const ctx = document.getElementById("myChart");
-    const myChart = new Chart(ctx, {
+      new Chart(ctx, {
       type: 'line', //チャートの表示形式
       data: {
         labels: ["6日前", "5日前", "4日前", "3日前", "2日前", "1日前", "今日"],
          datasets: [{
            label: "投稿した本の数",
-           data: <%= count %>,
-          borderColor: "rgba(0,0,255,1)"
+           data: [<%= books.created_day(6).count %>,
+           <%= books.created_day(5).count %>,
+           <%= books.created_day(4).count %>,
+           <%= books.created_day(3).count %>,
+           <%= books.created_day(2).count %>,
+           <%= books.created_day(1).count %>,
+           <%= books.created_day(0).count %>],
+          borderColor: "rgba(0,0,255,1)",
+          lineTension: 0.5 //線の丸みを指定。0で直線
          }]
-      },
-    });
+      },//dataはここまで
+      options: {
+        title: {
+          display: true,
+          text: '7日間の投稿数の比較'
+        },
+        scales: {
+          y: {
+            suggestedMin: 0,
+            suggestedMax: 10,
+            ticks: {
+              stepSize: 1,
+            }
+          }
+        }
+      }
+    })
   });
 </script>
 
 
 
-           data: [<%= books.created_day(6).count %>,
-          <%= books.created_day(5).count %>,
-          <%= books.created_day(4).count %>,
-          <%= books.created_day(3).count %>,
-          <%= books.created_day(2).count %>,
-          <%= books.created_day(1).count %>,
-          <%= books.created_day(0).count %>],
 <div>
   <h3>投稿数の前日比・前週比</h3>
 </div>
