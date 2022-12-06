@@ -29,6 +29,10 @@ class UsersController < ApplicationController
     @book = Book.new
     # endなし
   end
+  
+  def search
+    
+  end
 
   def edit
     @user = User.find(params[:id])
