@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     # to = Time.current.at_end_of_day
     # from = (to - 6.day).at_beginning_of_day
     # yesterday = (to - 1.day)
-    
+
     @user = User.find(params[:id])
     @books = @user.books
     @book = Book.new
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     @book_count_yesterday = @books.created_day(1).count
     @book_count_current_week = @books.count_current_week.count
     @book_count_last_week = @books.count_last_week.count
-    # @book_count_today = @books.where(created_at: Time.current.at_beginning_of_day..to).count 
+    # @book_count_today = @books.where(created_at: Time.current.at_beginning_of_day..to).count
     # @book_count_yesterday = @books.where(created_at: yesterday.at_beginning_of_day..yesterday.at_end_of_day).count
     # @book_count_current_week = @books.where(created_at: from..to).count
     # @book_count_last_week = @books.where(created_at: week_ago_from..week_ago_to).count
@@ -29,9 +29,17 @@ class UsersController < ApplicationController
     @book = Book.new
     # endなし
   end
-  
+
   def search
-    
+    user_books = User.find(params[:user_id]).books
+    # user_books = user.books
+    created_time = params[:created_at]
+    binding.pry
+    if created_time == ""
+      @search_book = "日付が選択されていません"
+    else
+      @search_book = user_books.where(created_at: created_time.to_date.all_day).count
+    end
   end
 
   def edit

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root to: "homes#top"
   get "home/about"=>"homes#about"
   get "search" => "searches#search"
-  
+
   devise_for :users
   # booksにいいねをつける。つまりbooksの下にfavoriteがつく do,end追加
   # 作成、削除のみなのでonly:[:create,:destroy]作成
@@ -15,12 +15,12 @@ Rails.application.routes.draw do
     # 今回は一人一回であるためuser_idとbook_idから指定できる
     resource :favorites, only: [:create, :destroy]
   end
-  
+
   resources :users, only: [:index,:show,:edit,:update] do
+    get 'search' => 'users#search'
     resources :relationships, only: [:create, :destroy]
     get 'relationships/followers' => 'relationships#followers', as: 'followers'
     get 'relationships/followings' => 'relationships#followings', as: 'followings'
-    get 'search' => 'users#search'
     # member do
     #   get :followings, :followers
     #   # GET /users/id/following
